@@ -7,13 +7,18 @@ using TMPro;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float turnSpeed = 5.0f;
-    private float horizontalInput;
     [SerializeField] private float speed;
+    [SerializeField] private float RPM;
+    private float horizontalInput;
     private float verticalInput;
-    public Rigidbody playerRb;
     public float horsepower;
+
+    public Rigidbody playerRb;
+    
     [SerializeField] GameObject CenterOfmass;
-    [SerializeField] TextMeshProUGUI Speedometre;
+    [SerializeField] TextMeshProUGUI Speedometretext;
+    [SerializeField] TextMeshProUGUI RPMtext;
+ 
     // Start is called before the first frame update
     private void Start()
     {
@@ -34,7 +39,9 @@ public class PlayerController : MonoBehaviour
        transform.Rotate(Vector3.up, turnSpeed * horizontalInput * Time.deltaTime);
 
         speed += Mathf.Round(playerRb.velocity.magnitude*2.237f); //3.6 for KpH
+        RPM = Mathf.Round((speed % 30) * 40);
 
-        Speedometre.SetText("Speed: " + speed + "mph");
+        Speedometretext.SetText("Speed: " + speed + "mph");
+        RPMtext.SetText("RPM : " + RPM);
     }
 }
