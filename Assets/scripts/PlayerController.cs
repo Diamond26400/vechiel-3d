@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float turnSpeed = 5.0f;
     private float horizontalInput;
-    [SerializeField] private float speed = 10.0f;
+    [SerializeField] private float speed;
     private float verticalInput;
     public Rigidbody playerRb;
     public float horsepower;
@@ -33,8 +33,8 @@ public class PlayerController : MonoBehaviour
         transform.Translate(Vector3.forward * Time.deltaTime * speed * verticalInput);
        transform.Rotate(Vector3.up, turnSpeed * horizontalInput * Time.deltaTime);
 
-        speed = Mathf.Round(playerRb.velocity.magnitude*2.237f); //3.6 for KpH
+        speed += Mathf.Round(playerRb.velocity.magnitude*2.237f); //3.6 for KpH
 
-        Speedometre.SetText("Speedometer: " + speed + "mph");
+        Speedometre.SetText("Speed: " + speed + "mph");
     }
 }
