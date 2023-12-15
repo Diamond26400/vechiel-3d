@@ -8,17 +8,20 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float turnSpeed = 5.0f;
     [SerializeField] private float speed;
-    [SerializeField] private float RPM;
+    [SerializeField] private float rpm;
     private float horizontalInput;
     private float verticalInput;
     public float horsepower;
 
     public Rigidbody playerRb;
-    
+
+    [SerializeField] List<WheelCollider> allWheels;
+    [SerializeField] int wheelsOnGround;
+
     [SerializeField] GameObject CenterOfmass;
     [SerializeField] TextMeshProUGUI Speedometretext;
-    [SerializeField] TextMeshProUGUI RPMtext;
- 
+    [SerializeField] TextMeshProUGUI rpmtext;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -32,16 +35,41 @@ public class PlayerController : MonoBehaviour
         // Get player input
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
+        if (IsOnGround())
+        {
 
-        //  move vehicle forward  
-        playerRb.AddRelativeForce(Vector3.forward * verticalInput * horsepower);
-        transform.Translate(Vector3.forward * Time.deltaTime * speed * verticalInput);
-       transform.Rotate(Vector3.up, turnSpeed * horizontalInput * Time.deltaTime);
+            //  move vehicle forward  
+            playerRb.AddRelativeForce(Vector3.forward * verticalInput * horsepower);
+            transform.Translate(Vector3.forward * Time.deltaTime * speed * verticalInput);
+            transform.Rotate(Vector3.up, turnSpeed * horizontalInput * Time.deltaTime);
 
-        speed += Mathf.Round(playerRb.velocity.magnitude*2.237f); //3.6 for KpH
-        RPM = Mathf.Round((speed % 30) * 40);
+            //calculating speed of vechiel
+            speed += Mathf.Round(playerRb.velocity.magnitude * 2.237f); //3.6 for KpH
+            Speedometretext.SetText("Speed:" + speed + "mph");
 
-        Speedometretext.SetText("Speed: " + speed + "mph");
-        RPMtext.SetText("RPM : " + RPM);
+            //calculating RPM
+            rpm = Mathf.Round((speed % 30) * 40);
+            rpmtext.SetText("RPM:" + rpm);
+
+        }
+        bool IsOnGround()
+        {
+            wheelsOnGround = 0;
+            foreach (WheelCollider wheel in allWheels)
+            {
+                if (wheel.isGrounded)
+                {
+                    wheelsOnGround++;
+                }
+            }
+            if (wheelsOnGround == 4)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
