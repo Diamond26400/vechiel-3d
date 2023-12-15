@@ -35,14 +35,14 @@ public class PlayerController : MonoBehaviour
         // Get player input
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
+
+        //  move vehicle forward  
+        playerRb.AddRelativeForce(Vector3.forward * verticalInput * horsepower);
+        transform.Translate(Vector3.forward * Time.deltaTime * speed * verticalInput);
+        transform.Rotate(Vector3.up, turnSpeed * horizontalInput * Time.deltaTime);
+
         if (IsOnGround())
         {
-
-            //  move vehicle forward  
-            playerRb.AddRelativeForce(Vector3.forward * verticalInput * horsepower);
-            transform.Translate(Vector3.forward * Time.deltaTime * speed * verticalInput);
-            transform.Rotate(Vector3.up, turnSpeed * horizontalInput * Time.deltaTime);
-
             //calculating speed of vechiel
             speed += Mathf.Round(playerRb.velocity.magnitude * 2.237f); //3.6 for KpH
             Speedometretext.SetText("Speed:" + speed + "mph");
